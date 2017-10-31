@@ -11,8 +11,11 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "axios": "^0.17.0",
+    "axios-progress-bar": "^1.0.0",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-select": "^2.3.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
