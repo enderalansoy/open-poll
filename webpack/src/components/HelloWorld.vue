@@ -1,8 +1,19 @@
 <template>
-  <div>
-    <v-select v-model="selectedTeam" :options="teams.map(team => team.project_name)"></v-select>
-    <p>{{teams}}</p>
-  </div>
+  <b-container>
+    <v-select label="Team:" placeholder="Select team..." v-model="selectedTeam" :options="teams.map(team => team.project_name)"></v-select>
+    <br />
+    <ul v-if="selectedTeam"><li>Selected team: {{selectedTeam}}</li></ul>
+      <ul v-for="i in 5" :key='i'>
+        <li>Criteria {{i}}:</li>
+        <li>
+        <b-form-radio-group :id="'selection-' + i" buttons button-variant="primary"
+        size="lg" v-model="selected[i]" :options="options" name="radioBtnOutline" />
+        </li>
+        <li>{{selected[i]}}</li>
+      </ul>
+      <b-button size="lg">Clear</b-button>
+      <b-button size="lg" variant="success" @click="onSubmit()">Submit</b-button>
+  </b-container>
 </template>
 
 <script>
@@ -14,7 +25,20 @@ export default {
     return {
       teams: [],
       selectedTeam: '',
+      selected: [],
+      options: [
+        { text: '1', value: 1 },
+        { text: '2', value: 2 },
+        { text: '3', value: 3 },
+        { text: '4', value: 4 },
+        { text: '5', value: 5 },
+      ],
     };
+  },
+  computed: {
+    btnStates() {
+      return this.buttons.map(btn => btn.state);
+    },
   },
   created() {
     this.getTeams();
@@ -28,6 +52,8 @@ export default {
       .catch((e) => {
         this.errors.push(e);
       });
+    },
+    onSubmit() {
     },
   },
 };
