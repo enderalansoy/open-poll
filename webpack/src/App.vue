@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="./assets/openxclogo.png">
+    <img src="./assets/openxclogo.png"> <img src="./assets/fordlogo.png">
     <router-view/>
   </div>
 </template>
