@@ -16,7 +16,7 @@
       <br />
       <b-button size="lg" variant="success" @click="onSubmit()" :disabled="isSubmitDisabled">{{submitLabel}}</b-button>
       <br /><br />
-      <b-button size="lg">Sonuçlar</b-button>
+      <b-button size="lg" @click="showResultsButton()">Sonuçlar</b-button>
       <b-button size="lg" @click="onLogout()">Çıkış</b-button>
       <br /><br />
       <p>Logged in as: {{voterIdFromCookie}}</p>
@@ -109,6 +109,9 @@ export default {
     console.log('created');
   },
   methods: {
+    showResultsButton() {
+      this.$router.push('Results');
+    },
     checkId() {
       axios.get(`/voter/isvoter?id=${this.voterIdFromCookie}`)
         .then((r1) => {
