@@ -13,6 +13,10 @@ module.exports = {
       type: 'string',
       required: true,
     },
+    total_points: {
+      type: 'float',
+      defaultsTo: 0,
+    },
     vote: {
       collection: 'vote',
       via: 'voter',

@@ -25,6 +25,22 @@ module.exports = {
       type: 'float',
       required: true,
     },
+    criteria5: {
+      type: 'float',
+      required: true,
+    },
+    criteria6: {
+      type: 'float',
+      required: true,
+    },
+    criteria7: {
+      type: 'float',
+      required: true,
+    },
+    criteria8: {
+      type: 'float',
+      required: true,
+    },
     team: {
       model: 'team',
       required: true,

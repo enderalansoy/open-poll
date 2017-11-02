@@ -8,11 +8,21 @@
 module.exports = {
 
   new: (req, res) => {
+    let voteTotal = 0;
     Vote.create(req.allParams()).exec((err, vote) => {
       if (err) {
         return res.json(err);
       }
-      return res.json(vote);
+      voteTotal = vote.criteria1 + vote.criteria2 + vote.criteria3 + vote.criteria4 + vote.criteria5 + vote.criteria6 + 
+      vote.criteria7 + vote.criteria8;
+      console.log(voteTotal);
+      Team.find({ id: req.param('team') }).exec((err, team) => {
+        console.log(team);
+        Team.update({ id: req.param('team') }, { total_points: team[0].total_points + voteTotal }).exec((err, t) => {
+          if (err) return res.json(err);
+          return res.json(t);
+        });
+      });
     });
   },
 
@@ -26,5 +36,9 @@ module.exports = {
       });
     });
   },
+
+  results: (req, res) => {
+    
+  }
 
 };

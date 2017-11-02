@@ -6,20 +6,38 @@ import { loadProgressBar } from 'axios-progress-bar';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
-import HelloWorld from '@/components/HelloWorld';
+import Index from '@/components/Index';
+import Login from '@/components/Login';
+import Results from '@/components/Results';
 
-Vue.use(Router);
 Vue.use(BootstrapVue);
 Vue.component('v-select', vSelect);
 
 loadProgressBar();
+Vue.use(Router);
 
 export default new Router({
+  mode: 'history',
+  base: __dirname,
   routes: [
     {
-      path: '/',
-      name: 'Hello',
-      component: HelloWorld,
+      path: '/home',
+      name: 'Index',
+      component: Index,
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+    },
+    {
+      path: '/results',
+      name: 'Results',
+      component: Results,
+    },
+    {
+      path: '*',
+      redirect: '/login',
     },
   ],
 });

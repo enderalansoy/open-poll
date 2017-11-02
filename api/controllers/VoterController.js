@@ -17,5 +17,22 @@ module.exports = {
       });
     });
   },
-
+  isvoter: (req, res) => {
+    Voter.count({ id: req.param('id') }).exec((err, found) => {
+      if (found === 1) {
+        res.json({status: true});
+      } else {
+        res.json({status: false});
+      }
+    });
+  },
+  hasvoted: (req, res) => {
+    Vote.find({ voter: req.param('voter'), team: req.param('team') }).exec((err, team) => {
+      if (team.length > 0) {
+        return res.json({status: true});
+      } else {
+        return res.json({status: false});
+      }
+    });
+  },
 };
