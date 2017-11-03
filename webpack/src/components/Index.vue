@@ -1,8 +1,9 @@
 <template>
-  <b-container fluid>
-    <v-select label="Team:" @change="changeHandler()" placeholder="Select team..." v-model="selectedTeam" :options="teams.map(team => team.project_name)"></v-select>
+  <b-container>
+    <v-select label="Team:" @change="changeHandler()" placeholder="Oylayacağınız ekibi seçiniz..." v-model="selectedTeam" :options="teams.map(team => team.project_name)"></v-select>
     <br />
-    <ul v-if="selectedTeam"><h4>Selected team: {{selectedTeam}}</h4></ul>
+    <b-alert variant="success" show v-if="selectedTeam">Seçilen ekip: <strong>{{selectedTeam}}</strong></b-alert>
+    <b-alert variant="warning" show v-else><strong>Lütfen oylayacağınız ekibi yukarıdaki listeden seçiniz!</strong></b-alert>
       <ul v-for="i in criterias.length - 1" :key='i'>
         <li><h4>{{criterias[i]}}</h4></li><br />
         <li>
@@ -16,10 +17,10 @@
       <br />
       <b-button size="lg" variant="success" @click="onSubmit()" :disabled="isSubmitDisabled">{{submitLabel}}</b-button>
       <br /><br />
-      <b-button size="lg" @click="showResultsButton()">Sonuçlar</b-button>
-      <b-button size="lg" @click="onLogout()">Çıkış</b-button>
+      <b-button size="lg" variant="info" @click="showResultsButton()">Sonuçlar</b-button>
+      <b-button size="lg" variant="danger" @click="onLogout()">Çıkış</b-button>
       <br /><br />
-      <p>Logged in as: {{voterIdFromCookie}}</p>
+      <p>Aktif kullanıcı: {{voterIdFromCookie}}</p>
   </b-container>
 </template>
 
@@ -53,7 +54,7 @@ export default {
         'Uygulamayı, tasarımının yalınlığı bakımından değerlendiriniz:',
         'Uygulamayı, mevcut kaynakları verimli kullanması bakımından değerlendiriniz:',
         'Ekibi, sunum başarısı bakımından değerlendiriniz:',
-        'Bonus puan:',
+        'Bonus puan: (opsiyonel)',
       ],
       submitLabel: 'Gönder',
     };
@@ -72,7 +73,14 @@ export default {
       typeof this.selected[5] === 'undefined' ||
       typeof this.selected[6] === 'undefined' ||
       typeof this.selected[7] === 'undefined' ||
-      typeof this.selected[8] === 'undefined' ||
+      this.selected[1] === 0 ||
+      this.selected[2] === 0 ||
+      this.selected[3] === 0 ||
+      this.selected[4] === 0 ||
+      this.selected[5] === 0 ||
+      this.selected[6] === 0 ||
+      this.selected[7] === 0 ||
+      // typeof this.selected[8] === 'undefined' ||
       this.isAlreadyVoted) {
         return true;
       }
@@ -82,6 +90,7 @@ export default {
   watch: {
     selectedTeam: {
       handler() {
+        this.undefineSelected();
         axios.get(`/team?project_name=${this.selectedTeam}`)
         .then((response) => {
           axios.get(`/voter/hasvoted?voter=${this.voterIdFromCookie}&team=${response.data[0].id}`)
@@ -90,12 +99,10 @@ export default {
               console.log('Has already voted for this team.');
               this.submitLabel = 'Bu takımı oyladınız!';
               this.isAlreadyVoted = true;
-              this.selected = [];
             } else {
               console.log('Has not voted for this team.');
               this.isAlreadyVoted = false;
               this.submitLabel = 'Gönder';
-              this.selected = [];
             }
           });
         });
@@ -106,9 +113,18 @@ export default {
     this.voterIdFromCookie = Cookies.get('secretCookie');
     this.checkId();
     this.getTeams();
-    console.log('created');
   },
   methods: {
+    undefineSelected() {
+      this.selected[1] = 0;
+      this.selected[2] = 0;
+      this.selected[3] = 0;
+      this.selected[4] = 0;
+      this.selected[5] = 0;
+      this.selected[6] = 0;
+      this.selected[7] = 0;
+      this.selected[8] = 0;
+    },
     showResultsButton() {
       this.$router.push('Results');
     },
@@ -117,7 +133,6 @@ export default {
         .then((r1) => {
           if (r1.data.status !== true) {
             this.$router.push('Login');
-            console.log('not found2');
             console.log(Cookies.get('secretCookie'));
           }
         })
@@ -152,6 +167,11 @@ export default {
     onSubmit() {
       axios.get(`/team?project_name=${this.selectedTeam}`)
       .then((r1) => {
+        for (let i = 1; i <= 8; i += 1) {
+          if (typeof this.selected[i] === 'undefined') {
+            this.selected[i] = 0;
+          }
+        }
         axios.post('/vote/new', {
           team: r1.data[0].id,
           voter: this.voterIdFromCookie,
@@ -185,7 +205,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
+h1, h2, h4 {
   font-weight: normal;
 }
 

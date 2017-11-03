@@ -7,6 +7,22 @@
 
 module.exports = {
 
+  new: (req, res) => {
+    Voter.create(req.allParams()).exec((err, voter) => {
+      if (err) {
+        return res.json(err);
+      }
+      return res.json(voter);
+    });
+  },
+
+  api: (req, res) => {
+    Voter.find({}).exec((err, voters) => {
+      if (err) return res.json(err);
+      return res.json(voters);
+    })
+  },
+
   remove: (req, res) => {
     Voter.destroy({ id: req.params.id }).exec((err) => {
       if (err) {
@@ -26,6 +42,17 @@ module.exports = {
       }
     });
   },
+
+  isvoterusername: (req, res) => {
+    Voter.count({ username: req.param('username') }).exec((err, found) => {
+      if (found === 1) {
+        res.json({status: true});
+      } else {
+        res.json({status: false});
+      }
+    });
+  },
+
   hasvoted: (req, res) => {
     Vote.find({ voter: req.param('voter'), team: req.param('team') }).exec((err, team) => {
       if (team.length > 0) {
@@ -35,4 +62,5 @@ module.exports = {
       }
     });
   },
+
 };

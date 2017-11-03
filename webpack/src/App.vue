@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <img src="./assets/openxclogo.png"> <img src="./assets/fordlogo.png">
+    <img src="./assets/fordotosanlogo.png" width="50%" height="50%">
+    <br />
+    <img src="./assets/openxclogo.png" width="25%" height="25%">
     <router-view/>
   </div>
 </template>

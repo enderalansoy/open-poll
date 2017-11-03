@@ -1,10 +1,15 @@
 <template>
   <b-container>
-    <b-form-input id="input-large" size="lg" v-model="secret" type="text" 
-    placeholder="Enter your secret here..."></b-form-input>
+    <b-alert variant="danger"
+             dismissible
+             :show="showDismissibleAlert"
+             @dismissed="showDismissibleAlert=false">
+    Girdiğiniz kullanıcı adı yanlış!
+    </b-alert>
+    <b-form-input id="input-large" size="lg" v-model="username" type="text" 
+    placeholder="Kullanıcı adı"></b-form-input>
     <br />
-    <b-button @click="loginAction()" size="lg">Enter</b-button>
-    {{resp}}
+    <b-button variant="primary" @click="loginAction()" size="lg">Giriş</b-button>
   </b-container>
 </template>
 
@@ -16,8 +21,10 @@ export default {
   name: 'Login',
   data() {
     return {
-      secret: '',
+      username: '',
       voterData: '',
+      secret: '',
+      showDismissibleAlert: false,
     };
   },
   created() {
@@ -36,18 +43,29 @@ export default {
           this.$router.push('Login');
         });
     },
+
     loginAction() {
-      axios.get(`/voter/isvoter?id=${this.secret}`)
+      axios.get(`/voter?username=${this.username}`)
         .then((r1) => {
-          if (!r1.data.status) {
-            alert('username is not correct');
-            return;
-          }
-          Cookies.set('secretCookie', this.secret, { expires: 7 });
-          this.$router.push('Home');
+          this.secret = r1.data[0].id;
+          axios.get(`/voter/isvoter?id=${r1.data[0].id}`)
+          .then((r2) => {
+            if (!r2.data.status) {
+              this.showDismissibleAlert = true;
+              return;
+            }
+            Cookies.set('secretCookie', r1.data[0].id, { expires: 7 });
+            this.$router.push('Home');
+          })
+          .catch((err) => {
+            this.showDismissibleAlert = true;
+            console.log(err);
+          });
         })
         .catch((err) => {
-          this.errors.push(err);
+          this.showDismissibleAlert = true;
+          console.log(err);
+          this.$router.push('Login');
         });
     },
   },

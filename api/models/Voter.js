@@ -13,10 +13,6 @@ module.exports = {
       type: 'string',
       required: 'Enter name.',
     },
-    password: {
-      type: 'string',
-      required: true,
-    },
     vote: {
       collection: 'vote',
       via: 'voter',

@@ -1,8 +1,9 @@
 <template>
   <b-container fluid>
-    <h4>Results</h4>
+    <h4>Sonuçlar</h4>
     <b-table striped hover :items="teams" :fields="fields" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" ></b-table>
-    <b-button @click="goBack()" size="lg">Geri Dön</b-button>
+    <b-button variant="primary" @click="goBack()" size="lg">Geri Dön</b-button>
+    <br /><br /><br />
   </b-container>
 </template>
 
@@ -16,21 +17,19 @@ export default {
       sortBy: 'total_points',
       sortDesc: true,
       fields: [
-        { key: 'project_name', label: 'Team', sortable: true },
-        { key: 'total_points', label: 'Points', sortable: true },
-        //{ key: '?', label: 'Vote Count', sortable: false },
+        { key: 'project_name', label: 'Ekip', sortable: true },
+        { key: 'total_points', label: 'Toplam Puan', sortable: true },
+        { key: 'vote_count', label: 'Oy Sayısı', sortable: false },
       ],
       teams: [],
     };
   },
   created() {
-    axios.get('/team')
+    axios.get('/team/api')
     .then((r1) => {
       r1.data.forEach((team) => {
         this.teams.push(team);
       });
-      console.log(r1.data[0].total_points);
-      console.log(r1.data[1].total_points);
     })
     .catch((err) => {
       this.errors.push(err);

@@ -43,4 +43,13 @@ module.exports = {
     });
   },
 
+  api: (req, res) => {
+    Team.find({}).populate('vote').exec((err, teams) => {
+      teams.forEach((team) => {
+        team.vote_count = team.vote.length;
+      });
+      res.json(teams);
+    });
+  }
+
 };

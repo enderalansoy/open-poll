@@ -19,7 +19,7 @@ module.exports = {
     },
     vote: {
       collection: 'vote',
-      via: 'voter',
+      via: 'team',
     },
   },
 
