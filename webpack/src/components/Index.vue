@@ -167,6 +167,8 @@ export default {
         .then((response) => {
           console.log(response);
           this.selected = [];
+          this.isAlreadyVoted = true;
+          this.submitLabel = 'Bu takımı oyladınız!';
           alert('Oylama gerçekleştirildi.');
         })
         .catch((error) => {
