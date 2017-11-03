@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
     <h4>Results</h4>
-    <b-table striped hover :items="teams" :fields="fields"></b-table>
+    <b-table striped hover :items="teams" :fields="fields" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" ></b-table>
     <b-button @click="goBack()" size="lg">Geri Dön</b-button>
   </b-container>
 </template>
@@ -13,10 +13,12 @@ export default {
   name: 'Results',
   data() {
     return {
+      sortBy: 'total_points',
+      sortDesc: true,
       fields: [
         { key: 'project_name', label: 'Team', sortable: true },
         { key: 'total_points', label: 'Points', sortable: true },
-        { key: 'total_points', label: 'Vote Count', sortable: false },
+        //{ key: '?', label: 'Vote Count', sortable: false },
       ],
       teams: [],
     };
@@ -61,4 +63,5 @@ li {
 a {
   color: #42b983;
 }
+
 </style>
