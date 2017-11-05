@@ -38,7 +38,7 @@ module.exports = {
   },
 
   update_total_points: (req, res) => {
-    Team.update({}, { total_points: 0 }).exec((err, team) => {
+    Team.update({}, { total_points: req.param('tp') }).exec((err, team) => {
       return res.json(team);
     });
   },

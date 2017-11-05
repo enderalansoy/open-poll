@@ -27,7 +27,7 @@ module.exports = {
   },
 
   remove: (req, res) => {
-    Vote.destroy({ id: req.params.id }).exec((err) => {
+    Vote.destroy({ id: req.params.id }).exec((err, vote) => {
       if (err) {
         return res.json(err);
       }
@@ -37,8 +37,25 @@ module.exports = {
     });
   },
 
-  results: (req, res) => {
-    
-  }
+  clear: (req, res) => {
+    Vote.destroy({}).exec((err) => {
+      if (err) return res.json(err);
+      Team.update({}, { total_points: 0 }).exec((err, t) => {
+        if (err) return res.json(err);
+      });
+      return res.json('All votes have been deleted');
+    });
+  },
+
+  remove: (req, res) => {
+    Vote.destroy({ id: req.params.id }).exec((err) => {
+      if (err) {
+        return res.json(err);
+      }
+      return res.json({
+        message: 'Vote has been deleted.',
+      });
+    });
+  },
 
 };
